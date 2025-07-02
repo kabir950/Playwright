@@ -1,0 +1,12 @@
+{
+  "name": "playwright-lambdatest-project",
+  "version": "1.0.0",
+  "scripts": {
+    "test": "npx playwright test"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.51.1",
+    "playwright": "^1.51.1",
+    "typescript": "^5.0.0"
+  }
+}

@@ -19,7 +19,7 @@ const { chromium } = require('playwright');
       console: true,
       tunnel: false,
       // 👇 Upload file to LambdaTest
-      files: ['"C:/Users/kabirk/Pictures/Screenshots/Screenshot (2).png"']
+      
     }
   };
 
@@ -34,11 +34,8 @@ const { chromium } = require('playwright');
   console.log('Opened file upload page');
 
   // 👇 STILL use the local path — LambdaTest remaps it in the backend
-  await page.locator('#file-upload').setInputFiles('C:/Users/kabirk/Pictures/Screenshots/Screenshot (2).png');
+\
 
-  await page.locator('#file-submit').click();
-
-  console.log('File uploaded successfully via LambdaTest cloud storage');
 
   await browser.close();
 })();

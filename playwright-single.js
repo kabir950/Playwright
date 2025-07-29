@@ -1,70 +1,45 @@
-const cp = require('child_process');
-const { chromium } = require('playwright'); // ✅ Use Chromium for Chrome
+
+
+
+
+const { chromium } = require('playwright');
 
 (async () => {
-  const playwrightClientVersion = cp
-    .execSync('npx playwright --version')
-    .toString()
-    .trim()
-    .split(' ')[1];
-
   const capabilities = {
-    browserName: 'chrome',              // ✅ Chromium for Chrome
-    version: 'latest',
-    platform: 'MacOS Ventura',                  // ✅ Use desktop OS
-    type: 'playwright',
-    region: 'apac',
-    geoLocation: 'NZ',
-   // resolution: '1920x1080',                 // ✅ Full desktop screen
-
-    video: true,
-    commandLog: true,
-    user: 'kabirk',
-    accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth'
+    browserName: 'Chrome',
+    browserVersion: 'latest',
+    'LT:Options': {
+      platform: 'Windows 11',
+      build: 'Playwright File Upload',
+      name: 'Upload Screenshot PNG',
+      user: 'vaneetb',
+      accessKey: 'PQ2AhuxqqOWAfvzfJlvPaOqusS7YKqfwFJR6DoWY2vsA8CvTzC',
+      network: true,
+      video: true,
+      console: true,
+      tunnel: false,
+      // 👇 Upload file to LambdaTest
+      files: ['"C:/Users/kabirk/Pictures/Screenshots/Screenshot (2).png"']
+    }
   };
 
-  const wsEndpoint = `wss://cdp.lambdatest.com/playwright?capabilities=${encodeURIComponent(
-    JSON.stringify(capabilities)
-  )}`;
+  const browser = await chromium.connect({
+    wsEndpoint: `wss://cdp.lambdatest.com/playwright?capabilities=${encodeURIComponent(JSON.stringify(capabilities))}`
+  });
 
-  const browserInstance = await chromium.connect({ wsEndpoint }); // ✅ Connect with Chromium
-  const context = await browserInstance.newContext();
+  const context = await browser.newContext();
   const page = await context.newPage();
 
-  const setTestStatus = async (status, remark) => {
-    const testStatus = {
-      action: 'setTestStatus',
-      arguments: {
-        status,
-        remark
-      }
-    };
-    await page.evaluate(
-      () => {},
-      `lambdatest_action: ${JSON.stringify(testStatus)}`
-    );
-  };
+  await page.goto('https://the-internet.herokuapp.com/upload');
+  console.log('Opened file upload page');
 
-  try {
-    await page.goto('https://www.spingalaxy.com/?s=bfp33171&a=115299733123112');
-    await page.waitForTimeout(3000);
+  // 👇 STILL use the local path — LambdaTest remaps it in the backend
+  await page.locator('#file-upload').setInputFiles('C:/Users/kabirk/Pictures/Screenshots/Screenshot (2).png');
 
-    const title = await page.title();
-    console.log('Page title:', title);
+  await page.locator('#file-submit').click();
 
-    if (!title.includes('LambdaTest')) {
-      throw new Error('Title does not contain LambdaTest');
-    }
+  console.log('File uploaded successfully via LambdaTest cloud storage');
 
-    await setTestStatus('passed', 'Title matched');
-  } catch (error) {
-    await setTestStatus('failed', error.message || 'Test failed');
-    console.error(error);
-    await browserInstance.close();
-    process.exit(1);
-  }
-
-  await page.close();
-  await browserInstance.close();
-  process.exit(0);
+  await browser.close();
 })();
+

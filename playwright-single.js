@@ -1,8 +1,5 @@
-
-
-
-
 const { chromium } = require('playwright');
+const path = require('path');
 
 (async () => {
   const capabilities = {
@@ -18,8 +15,7 @@ const { chromium } = require('playwright');
       video: true,
       console: true,
       tunnel: false,
-      // 👇 Upload file to LambdaTest
-      
+      files: ['./assets/screenshot.png'] // ✅ relative path from repo root
     }
   };
 
@@ -33,10 +29,12 @@ const { chromium } = require('playwright');
   await page.goto('https://the-internet.herokuapp.com/upload');
   console.log('Opened file upload page');
 
-  // 👇 STILL use the local path — LambdaTest remaps it in the backend
-\
+  // ✅ Now upload the file (LambdaTest internally maps it)
+  const fileInput = page.locator('input[type="file"]');
+  await fileInput.setInputFiles('./assets/screenshot.png'); // 👈 relative path again
 
+  await page.locator('#file-submit').click();
+  console.log('File uploaded successfully');
 
   await browser.close();
 })();
-

@@ -1,23 +1,31 @@
-# Starter pipeline
-# Start with a minimal pipeline that you can customize to build and deploy your code.
-# Add steps that build, run tests, deploy, and more:
-# https://aka.ms/yaml
-
 trigger:
   - main
+
 pool:
   vmImage: 'ubuntu-latest'
+
 steps:
   - task: NodeTool@0
     inputs:
       versionSpec: '18.x'
     displayName: 'Install Node.js'
+
   - script: |
       npm install
     displayName: 'Install dependencies'
+
   - script: |
-      npx playwright install
-    displayName: 'Install Playwright Browsers'
+      npx playwright install --with-deps
+    displayName: 'Install Playwright Browsers with dependencies'
+
   - script: |
       node playwright-single.js
-    displayName: 'Run playwright-single.js'
+    displayName: 'Run Playwright Test (playwright-single.js)'
+
+  - task: LambdatestResults@1
+    inputs:
+      username: 'kabirk'         # Set in Azure DevOps Pipeline Variables
+      accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth'      # Set in Azure DevOps Pipeline Variables
+      frameworkName: 'playwright'        # Supported values: playwright, jest, mocha, etc.
+      testResultPath: '**/test-results/*.xml'  # Path to your test result files (adjust if needed)
+    displayName: 'Upload LambdaTest Results'

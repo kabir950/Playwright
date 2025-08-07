@@ -22,10 +22,18 @@ steps:
       node playwright-single.js
     displayName: 'Run Playwright Test (playwright-single.js)'
 
+  - task: PublishTestResults@2
+    inputs:
+      testResultsFiles: '**/test-results/results.xml'
+      testRunTitle: 'LambdaTest Results (Playwright)'
+    condition: succeededOrFailed()
+    displayName: 'Publish Test Results to Azure DevOps'
+
   - task: LambdatestResults@1
     inputs:
-      username: 'kabirk'   # Or hardcode: 'kabirk'
-      accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth'  # Or hardcode the key if needed
+      username: 'kabirk'
+      accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth'
       frameworkName: 'playwright'
-      testResultPath: 'test-results/results.xml'
+      testResultPath: '$(System.DefaultWorkingDirectory)/test-results/results.xml'
+    condition: succeededOrFailed()
     displayName: 'Upload LambdaTest Results'

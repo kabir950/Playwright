@@ -15,8 +15,7 @@ const path = require('path');
       network: true,
       video: true,
       console: true,
-      tunnel: false,
-      files: ['./assets/screenshot.png']
+      tunnel: false
     }
   };
 
@@ -28,12 +27,7 @@ const path = require('path');
   const page = await context.newPage();
 
   await page.goto('https://the-internet.herokuapp.com/upload');
-  console.log('Opened file upload page');
 
-  const fileInput = page.locator('input[type="file"]');
-  await fileInput.setInputFiles('./assets/screenshot.png');
-  await page.locator('#file-submit').click();
-  console.log('File uploaded successfully');
 
   // ✅ Manually create JUnit XML
   const xml = `

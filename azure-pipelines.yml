@@ -19,13 +19,13 @@ steps:
     displayName: 'Install Playwright Browsers with dependencies'
 
   - script: |
-      npx playwright test --reporter=junit
-    displayName: 'Run Playwright Tests with JUnit Reporter'
+      node playwright-single.js
+    displayName: 'Run Playwright Test (playwright-single.js)'
 
   - task: LambdatestResults@1
     inputs:
-      username: 'kabirk' # Better to use pipeline variable $(LT_USERNAME)
-      accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth' # Better to use $(LT_ACCESS_KEY)
+      username: 'kabirk'   # Or hardcode: 'kabirk'
+      accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth'  # Or hardcode the key if needed
       frameworkName: 'playwright'
-      testResultPath: 'test-results/results.xml' # MUST match where your JUnit XML is generated
+      testResultPath: 'test-results/results.xml'
     displayName: 'Upload LambdaTest Results'

@@ -1,6 +1,9 @@
 trigger:
   - main
 
+variables:
+  LT_BUILD_NAME: "Playwright File Upload"
+
 pool:
   vmImage: 'ubuntu-latest'
 

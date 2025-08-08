@@ -8,7 +8,7 @@ const path = require('path');
     browserVersion: 'latest',
     'LT:Options': {
       platform: 'Windows 11',
-      build: 'Playwright File Upload',
+      build: process.env.LT.BUILD_NAME,
       name: 'Upload Screenshot PNG',
       user: 'kabirk',
       accessKey: 'LT_RhMHqS2TJ4lYNmnzOfTYRaNYNdbFdvoDAKSFTVknI2UQBth',

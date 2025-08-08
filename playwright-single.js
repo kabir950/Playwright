@@ -28,20 +28,5 @@ const path = require('path');
 
   await page.goto('https://the-internet.herokuapp.com/upload');
 
-
-  // ✅ Manually create JUnit XML
-  const xml = `
-<testsuites>
-  <testsuite name="Playwright Raw Script" tests="1" failures="0">
-    <testcase classname="FileUpload" name="Upload Screenshot PNG" time="1"/>
-  </testsuite>
-</testsuites>
-  `;
-
-  const reportDir = path.join(__dirname, 'test-results');
-  fs.mkdirSync(reportDir, { recursive: true });
-  fs.writeFileSync(path.join(reportDir, 'results.xml'), xml.trim());
-  console.log('✅ JUnit XML report generated at test-results/results.xml');
-
   await browser.close();
 })();
